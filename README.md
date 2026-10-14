@@ -61,7 +61,7 @@ A live cocoa-and-cream swirl stirs under your cursor. The menu searches as you t
 ## 7. First Signs: health information platform
 A calm, trustworthy platform for families facing craniosynostosis in India: condition guides, surgery care, a glossary, India-specific resources and a community area.
 
-**Live:** https://agarwalvedaansh80-glitch.github.io/firstsigns/ · **Intro:** [first-signs.mp4](first-signs.mp4)
+**Live:** https://agarwalvedaansh80-glitch.github.io/firstsigns/ · **Watch:** [YouTube](https://youtu.be/VuF0tYsWGCo) · **Video file:** [first-signs.mp4](first-signs.mp4)
 
 ---
 **Built with:** HTML, CSS, JavaScript, three.js / WebGL, React, Vercel. Also Wix and Lovable for client-editable sites.
