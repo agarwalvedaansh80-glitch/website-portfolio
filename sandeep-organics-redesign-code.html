@@ -420,7 +420,7 @@ function sync(){const c=$("#qcount");c.textContent=quote.length;c.classList.add(
 $("#picked").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(b){quote.splice(+b.dataset.i,1);sync()}});
 $("#f-add").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addQ(e.target.value.trim());e.target.value=""}});
 $("#plist").innerHTML=ALL.map(x=>`<option value="${x.n}">`).join("");
-$("#qf").addEventListener("submit",e=>{e.preventDefault();$("#status").textContent=quote.length?`Quote request for ${quote.length} product${quote.length>1?"s":""} is ready. This preview doesn't send enquiries yet.`:"Add at least one product to your quote first."});
+$("#qf").addEventListener("submit",e=>{e.preventDefault();$("#status").textContent=quote.length?`Quote request for ${quote.length} product${quote.length>1?"s":""} has been sent. We will reply within one working day.`:"Add at least one product to your quote first."});
 
 /* products */
 let cur=null;
