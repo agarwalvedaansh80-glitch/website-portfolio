@@ -361,7 +361,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 40px;justify-content:space-bet
         <div><span>Office</span>B-803, Kanakia Wall Street, Andheri East, Mumbai 400093</div>
       </div>
     </div>
-    <form class="qf" id="qf" novalidate>
+    <form class="qf" id="qf" novalidate><input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
       <div style="grid-column:1/-1"><div style="font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#a99d8b;margin-bottom:10px">In your quote</div><div class="picked" id="picked"></div></div>
       <label class="full" for="f-add">Add a product<input id="f-add" list="plist" placeholder="Type a name and press Enter"></label>
       <datalist id="plist"></datalist>
@@ -420,7 +420,28 @@ function sync(){const c=$("#qcount");c.textContent=quote.length;c.classList.add(
 $("#picked").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(b){quote.splice(+b.dataset.i,1);sync()}});
 $("#f-add").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addQ(e.target.value.trim());e.target.value=""}});
 $("#plist").innerHTML=ALL.map(x=>`<option value="${x.n}">`).join("");
-$("#qf").addEventListener("submit",e=>{e.preventDefault();$("#status").textContent=quote.length?`Quote request for ${quote.length} product${quote.length>1?"s":""} has been sent. We will reply within one working day.`:"Add at least one product to your quote first."});
+function sendEnquiry( form, subject, fromName, extra ) {
+  var fd = new FormData( form );
+  if ( fd.get( 'website' ) ) { return Promise.resolve( true ); }
+  var data = {};
+  fd.forEach( function ( v, k ) { if ( k !== 'website' ) { data[ k ] = data[ k ] !== undefined ? data[ k ] + ', ' + v : v; } } );
+  Object.keys( extra || {} ).forEach( function ( k ) { data[ k ] = extra[ k ]; } );
+  data.access_key = 'REPLACE_WITH_WEB3FORMS_KEY';
+  data.subject = subject;
+  data.from_name = fromName;
+  return fetch( 'https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify( data ) } )
+    .then( function ( r ) { return r.json().then( function ( j ) { return !!( r.ok && j.success ); }, function () { return false; } ); } )
+    .catch( function () { return false; } );
+}
+$("#qf").addEventListener("submit",e=>{e.preventDefault();
+  const form=e.currentTarget, status=$("#status");
+  if(!quote.length){status.textContent="Add at least one product to your quote first.";return;}
+  const btn=form.querySelector('button[type=submit]'); if(btn) btn.disabled=true;
+  sendEnquiry(form,"New quote request from Sandeep Organics website","Sandeep Organics website",{products:quote.join(", ")}).then(ok=>{
+    if(btn) btn.disabled=false;
+    status.textContent = ok ? `Quote request for ${quote.length} product${quote.length>1?"s":""} has been sent. We will reply within one working day.` : "Something went wrong. Please email us directly.";
+  });
+});
 
 /* products */
 let cur=null;
